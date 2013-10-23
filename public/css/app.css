@@ -1,0 +1,27 @@
+/* app css stylesheet */
+
+body{
+	background: #000000;
+	margin: 0;
+	padding: 0;
+}
+.player{
+	width:10px; 
+	height: 10px; 
+	background-color: #999999; 
+	position: absolute;
+}
+.scene{
+	width: 504px; 
+	height: 504px; 
+	border: thin #777777 solid; 
+	float: left;
+}
+.stats{
+	width: 200px; 
+	height: 504px; 
+	border: thin #777777 solid; 
+	float: right; 
+	font-size: 10px; 
+	color: #FFFFFF;
+}

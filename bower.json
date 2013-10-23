@@ -1,0 +1,13 @@
+{
+  "name": "devfest-mean-stack",
+  "version": "0.0.1",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ],
+  "dependencies": {
+    "angular": "latest",
+    "angular-socket-io": "latest"
+  }
+}
