@@ -46,6 +46,7 @@ app.configure(function () {
     app.use(express.urlencoded()); // bodyParser() va a ser deprecado con la version 3 de connect al salir node 0.12
     app.use(express.json()); // bodyParser() va a ser deprecado con la version 3 de connect al salir node 0.12
     app.use(express.methodOverride()); // habilita la recepción de métodos PUT y DELETE a través de formularios web
+    app.use( express.cookieParser() );
     app.use(express.session({store: new MemoryStore({reapInterval: 5 * 60 * 1000}), secret: 'claudioesungenioytodosloaman'}));
     app.use(function(req, res, next) {
         res.header("Access-Control-Allow-Origin", "*");
