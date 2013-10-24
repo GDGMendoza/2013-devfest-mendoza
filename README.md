@@ -6,9 +6,8 @@ El resumen del proyecto va acá!
 
 Clonate el repo y corré los siguientes comandos!:
 
-npm install
-
-bower install
+* npm install
+* bower install
 
 ## Ejecutando la aplicación
 
