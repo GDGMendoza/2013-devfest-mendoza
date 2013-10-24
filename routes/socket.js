@@ -2,11 +2,19 @@
  * Sockets
  */
 
-var evilPlayer = {};
+var evilPlayer = {}
 
-var otherPlayers = {}; // mudar lógica a métodos internos
+var otherPlayers = {
+/*	list: {},
+	toArray: function(){
+		var auxArray = [];
+		for()
+	}*/
+} // mudar lógica a métodos internos
 
-var scores = {}; // mudar lógica a métodos internos
+var scores = {
+
+} // mudar lógica a métodos internos
 
 var timeout = "";
 
@@ -26,6 +34,7 @@ module.exports = function(io) {
 	io.sockets.on('connection', function(socket) {
 
 		// Al conectarse
+		console.log(">>> Conexion satisfactoria al socket " + socket.id);
 		otherPlayers[socket.id] = {
 			id: false,
 			socket_id: socket.id,
@@ -39,6 +48,7 @@ module.exports = function(io) {
 			}
 		}
 		scores[socket.id] = {
+			nick: "hodor",
 			kill_score: 0,
 			survival_score: 0
 		}
@@ -46,14 +56,20 @@ module.exports = function(io) {
 			setRandomEvilPlayer();
 		}
 		if(socket.id == evilPlayer.socket_id){
-			timeout = setTimeout(function(){ //puede explotar de tantas formas distintas que ni las quiero pensar
+			timeout = setTimeout(function(){
 				otherPlayers[evilPlayer.socket_id] = evilPlayer;
 				setRandomEvilPlayer();
 			}, 30000);
 		}
+		io.sockets.emit('update', {
+			evilPlayer: evilPlayer,
+			otherPlayers: otherPlayers
+		});
+		io.sockets.emit('scores', scores);
 
 		// Al desconectarse
 		socket.on('disconnect',function(){
+			console.log(">>> Desconexion satisfactoria al socket " + socket.id);
 			if(timeout != "")
 				clearTimeout(timeout);
 			if(socket.id == evilPlayer.socket_id){
@@ -73,6 +89,7 @@ module.exports = function(io) {
 
 		// Al moverse un personaje - Núcleo del jueguito
 		socket.on('move', function(relative){
+			console.log(">>> Movimiento satisfactorio al socket " + socket.id);
 			if(socket.id == evilPlayer.socket_id){
 				evilPlayer.pos.x += relative.x;
 				evilPlayer.pos.y += relative.y;

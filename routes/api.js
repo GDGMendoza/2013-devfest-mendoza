@@ -2,7 +2,7 @@
  * API
  */
 
-module.exports = function(app){
+module.exports = function(app){ //login gestionado por acá
 
 	app.get('/api/cheatscore', function(req, res){
 		res.json({
