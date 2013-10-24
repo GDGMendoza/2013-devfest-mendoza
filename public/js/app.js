@@ -1,29 +1,25 @@
 'use strict';
 
-// Declare app level module which depends on filters, and services
+var app = angular.module('devFest', [
+  'devFest.controllers',
+  'devFest.directives',
 
-angular.module('myApp', [
-  'myApp.controllers',
-  'myApp.filters',
-  'myApp.services',
-  'myApp.directives',
-
-  // 3rd party dependencies
+  // dependencias de terceros
   'btford.socket-io'
 ]).
 config(function ($routeProvider, $locationProvider) {
   $routeProvider.
-    when('/view1', {
-      templateUrl: 'partials/partial1',
-      controller: 'MyCtrl1'
+    when('/', {
+      templateUrl: 'views/login.html',
+      controller: 'LoginCtrl'
     }).
-    when('/view2', {
-      templateUrl: 'partials/partial2',
-      controller: 'MyCtrl2'
+    when('/game', {
+      templateUrl: 'views/game.html',
+      controller: 'GameCtrl'
     }).
     otherwise({
-      redirectTo: '/view1'
+      redirectTo: '/'
     });
 
-  $locationProvider.html5Mode(true);
+  //$locationProvider.html5Mode(true);
 });

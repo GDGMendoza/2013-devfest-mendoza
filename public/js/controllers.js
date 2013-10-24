@@ -2,17 +2,27 @@
 
 /* Controllers */
 
-angular.module('myApp.controllers', []).
-  controller('AppCtrl', function ($scope, socket) {
-    socket.on('send:name', function (data) {
+angular.module('devFest.controllers', []).
+  controller('AppCtrl', function ($scope) {
+    //fallback controller
+    /*socket.on('send:name', function (data) {
       $scope.name = data.name;
-    });
+    });*/
   }).
-  controller('MyCtrl1', function ($scope, socket) {
-    socket.on('send:time', function (data) {
-      $scope.time = data.time;
-    });
+  controller('LoginCtrl', function ($scope, $http, $location) {
+    $scope.login = function(){
+      $location.path("/game");
+    }
   }).
-  controller('MyCtrl2', function ($scope) {
-    // write Ctrl here
+  controller('GameCtrl', function ($scope, socket) {
+    socket.on('update', function (data) {
+      $scope.evilPlayer = data.evilPlayer;
+      $scope.otherPlayers = data.otherPlayers;
+    });
+    socket.on('scores', function (data) {
+      $scope.scores = data;
+    });
+    $scope.move = function(relative){
+      socket.emit('move', relative);
+    }
   });

@@ -1,69 +1,111 @@
-/*
- * Serve content over a socket
+/**
+ * Sockets
  */
 
-/*
-module.exports = function (socket) {
-  socket.emit('send:name', {
-    name: 'Bob'
-  });
+var evilPlayer = {};
 
-  setInterval(function () {
-    socket.emit('send:time', {
-      time: (new Date()).toString()
-    });
-  }, 1000);
-};
-*/
+var otherPlayers = {}; // mudar lógica a métodos internos
 
-var players = [];
+var scores = {}; // mudar lógica a métodos internos
 
-function Player(){
-    var self = this;
+var timeout = "";
 
-    /*
-        Objeto del player
-     */
-    this.objPlayer = function(socket){
-        return '<div class="player" id="'+socket.id+'"></div>';
-    }
+function checkCollision(player){
+	return player.status.life && ((evilPlayer.pos.x - player.pos.x < 50) || (evilPlayer.pos.y - player.pos.y < 50));
 }
 
-module.exports = function(io){
-	return function(socket) {
-		var player = new Player();
-
-	    /*
-	        Cuando un usuario ingresa, se ejecuta una sola vez
-	     */
-	    socket.on('init',function(x,y){
-	        players.push({client:socket});
-	        for(p in players){
-	            if(players[p].client.id != socket.id){
-	                socket.emit('playersAlreadyIn',players[p].client.id,player.objPlayer(players[p].client));
-	            }
-	        }
-	        socket.emit('newPlayer',player.objPlayer(socket));
-	        io.sockets.emit('playerIn',socket.id,player.objPlayer(socket));
-	    });
-
-	    /*
-	        Cada vez que un player se muevo, lo enviamos a todos los players
-	     */
-	    socket.on('movePlayer',function(y,x,playerId){
-	        io.sockets.emit('moveRemotePlayer',y,x,playerId);
-	    });
-
-	    /*
-	        Cuando un usuario se desconecta, le avisa a todos los players para removerlo
-	     */
-	    socket.on('disconnect',function(){
-	        io.sockets.emit('removePlayer',socket.id);
-	        for(p in players){
-	            if(players[p].client.id == socket.id){
-	                delete players[p];
-	            }
-	        }
-	    });
+function setRandomEvilPlayer(){
+	for(id in otherPlayers){
+		evilPlayer = otherPlayers[id];
+		delete otherPlayers[id];
+		break;
 	}
+}
+
+module.exports = function(io) {
+	io.sockets.on('connection', function(socket) {
+
+		// Al conectarse
+		otherPlayers[socket.id] = {
+			id: false,
+			socket_id: socket.id,
+			pos: {
+				x: 0, 
+				y: 0
+			},
+			status: {
+				role: 'blue',
+				life: true
+			}
+		}
+		scores[socket.id] = {
+			kill_score: 0,
+			survival_score: 0
+		}
+		if(isEmpty(evilPlayer)){
+			setRandomEvilPlayer();
+		}
+		if(socket.id == evilPlayer.socket_id){
+			timeout = setTimeout(function(){ //puede explotar de tantas formas distintas que ni las quiero pensar
+				otherPlayers[evilPlayer.socket_id] = evilPlayer;
+				setRandomEvilPlayer();
+			}, 30000);
+		}
+
+		// Al desconectarse
+		socket.on('disconnect',function(){
+			if(timeout != "")
+				clearTimeout(timeout);
+			if(socket.id == evilPlayer.socket_id){
+				setTimeout(function(){
+					setRandomEvilPlayer();
+				}, 3000);
+			} else {
+				delete otherPlayers[socket.id];
+			}
+			delete scores[socket.id];
+			io.sockets.emit('update', {
+				evilPlayer: evilPlayer,
+				otherPlayers: otherPlayers
+			});
+			io.sockets.emit('scores', scores);
+		});
+
+		// Al moverse un personaje - Núcleo del jueguito
+		socket.on('move', function(relative){
+			if(socket.id == evilPlayer.socket_id){
+				evilPlayer.pos.x += relative.x;
+				evilPlayer.pos.y += relative.y;
+				for(id in otherPlayers){
+					if(checkCollision(otherPlayers[id])){
+						otherPlayers[id].status.life = false;
+						scores[evilPlayer.socket_id].kill_score += 1;
+						io.sockets.emit('scores', scores);
+					}
+				}
+			} else {
+				otherPlayers[socket.id].pos.x += relative.x;
+				otherPlayers[socket.id].pos.y += relative.y;
+				if(checkCollision(otherPlayers[socket.id])){
+					otherPlayers[socket.id].status.life = false;
+					scores[evilPlayer.socket_id].kill_score += 1;
+					io.sockets.emit('scores', scores);
+				}
+			}
+			io.sockets.emit('update', {
+				evilPlayer: evilPlayer,
+				otherPlayers: otherPlayers
+			});
+		});
+
+	});
+}
+
+// Increíble que todavía no este implmentado
+function isEmpty(obj) {
+    var name;
+    for (name in obj) {
+        return false;
+    }
+    return true;
 }
