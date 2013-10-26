@@ -2,7 +2,7 @@
  * Sockets
  */
 
-var evilPlayer = {}
+var evilPlayer = {};
 
 var otherPlayers = {
 /*	list: {},
@@ -10,16 +10,14 @@ var otherPlayers = {
 		var auxArray = [];
 		for()
 	}*/
-} // mudar lógica a métodos internos
+}; // mudar lógica a métodos internos
 
 var scores = {
 
-} // mudar lógica a métodos internos
-
-var timeout = "";
+}; // mudar lógica a métodos internos
 
 function checkCollision(player){
-	return player.status.life && ((evilPlayer.pos.x - player.pos.x < 50) || (evilPlayer.pos.y - player.pos.y < 50));
+	return player.status.life && (evilPlayer.pos.x - player.pos.x < 50) && (evilPlayer.pos.y - player.pos.y < 50);
 }
 
 function setRandomEvilPlayer(){
@@ -35,6 +33,7 @@ module.exports = function(io) {
 
 		// Al conectarse
 		console.log(">>> Conexion satisfactoria al socket " + socket.id);
+        var timeout = "";
 		otherPlayers[socket.id] = {
 			id: false,
 			socket_id: socket.id,
@@ -46,12 +45,12 @@ module.exports = function(io) {
 				role: 'blue',
 				life: true
 			}
-		}
+		};
 		scores[socket.id] = {
 			nick: "hodor",
 			kill_score: 0,
 			survival_score: 0
-		}
+		};
 		if(isEmpty(evilPlayer)){
 			setRandomEvilPlayer();
 		}
@@ -91,21 +90,21 @@ module.exports = function(io) {
 		socket.on('move', function(relative){
 			console.log(">>> Movimiento satisfactorio al socket " + socket.id);
 			if(socket.id == evilPlayer.socket_id){
-				evilPlayer.pos.x += relative.x;
-				evilPlayer.pos.y += relative.y;
-				for(id in otherPlayers){
+				evilPlayer.pos.x += 5 * relative.x;
+				evilPlayer.pos.y += 5 * relative.y;
+				for(var id in otherPlayers){
 					if(checkCollision(otherPlayers[id])){
 						otherPlayers[id].status.life = false;
-						scores[evilPlayer.socket_id].kill_score += 1;
+						scores[evilPlayer.socket_id].kill_score++;
 						io.sockets.emit('scores', scores);
 					}
 				}
 			} else {
-				otherPlayers[socket.id].pos.x += relative.x;
-				otherPlayers[socket.id].pos.y += relative.y;
+				otherPlayers[socket.id].pos.x += 5 * relative.x;
+				otherPlayers[socket.id].pos.y += 5 * relative.y;
 				if(checkCollision(otherPlayers[socket.id])){
 					otherPlayers[socket.id].status.life = false;
-					scores[evilPlayer.socket_id].kill_score += 1;
+					scores[evilPlayer.socket_id].kill_score++;
 					io.sockets.emit('scores', scores);
 				}
 			}

@@ -5,11 +5,12 @@
 angular.module('devFest.directives', []).
   directive('moveReceptor', function () {
     return {
+        restrict:'A',
     	link: function(scope, element, attrs){
     		var relative = {
     			x: 0,
     			y: 0
-    		}
+    		};
     		element.on('keyup', function(e){
     			switch(e.keyCode){
     				case '65': //left

@@ -66,7 +66,7 @@ if ('development' === app.get('env')) {
 // solo producción
 if ('production' === app.get('env')) {
   // TODO
-};
+}
 
 
 /**
