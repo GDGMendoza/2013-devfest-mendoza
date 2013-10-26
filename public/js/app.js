@@ -13,10 +13,6 @@ config(function ($routeProvider, $locationProvider) {
       templateUrl: 'views/login.html',
       controller: 'LoginCtrl'
     }).
-    when('/game', {
-      templateUrl: 'views/game.html',
-      controller: 'GameCtrl'
-    }).
     otherwise({
       redirectTo: '/'
     });
