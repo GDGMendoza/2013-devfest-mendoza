@@ -8,7 +8,7 @@ var http = require('http');
 var path = require('path');
 var MemoryStore = express.session.MemoryStore;
 //requiere npm install mongoose
-//var mongoose = require('mongoose');
+var mongoose = require('mongoose');
 
 var app = express();
 var server = http.createServer(app);
@@ -16,8 +16,8 @@ var io = require('socket.io').listen(server);
 
 
 // Configurando la validacion de la api con oauth2
-//var OAuth2Provider = require('oauth2-provider').OAuth2Provider,
-//    MemoryStore = express.session.MemoryStore;
+var OAuth2Provider = require('oauth2-provider').OAuth2Provider,
+    MemoryStore = express.session.MemoryStore;
 /**
  * Configuración
  */
@@ -30,20 +30,13 @@ var options = {
 }; //esto solo si configuraron los usuarios en mongodb.
 
 //Conexion a la base de datos Mongo Db - NoSQL
-/*mongoose.connect('mongodb://localhost/devFest',options, function(err, res) {
+mongoose.connect('mongodb://localhost/devFest',options, function(err, res) {
     if(err) {
         console.log('ERROR: connecting to Database. ' + err);
     } else {
         console.log('Connected to Database',res);
     }
-});*/
-/*
-    En realidad prefiero mongoskin antes que mongoose 
-    ya que no requiere preestablecer esquemas con lo que 
-    no se pierde la principal ventaja de mongodb :) 
-    pero después lo discutimos entre todos y vemos
-*/
-
+});
 // global
 app.set('port', process.env.PORT || 3000);
 //app.use(express.logger('dev'));
