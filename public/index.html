@@ -1,13 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="devFest">
 <head>
     <title>DevFest MEAN Stack!</title>
     <meta charset="utf8"/>
     <base href="/"/>
     <link href="css/app.css" rel="stylesheet"/>
 </head>
-<body ng-app="devFest">
-    <div ng-view></div>
+<body ng-controller="GameCtrl" ng-keyup="keyHandler($event, false)" ng-keydown="keyHandler($event, true)">
+    <div id="jueguito" >
+        <player ng-repeat="player in players" status="player"></player>
+    </div>
+    <div id="lobby" ng-controller="LobbyCtrl">
+
+    </div>
+    <div id="scores" ng-controller="ScoresCtrl">
+
+    </div>
 
 	<!-- Dependencias y Módulos -->
     <script src="socket.io/socket.io.js"></script>
@@ -15,6 +23,7 @@
     <script src="bower_components/angular-socket-io/socket.js"></script>
     <script src="js/controllers.js"></script>
     <script src="js/directives.js"></script>
+    <script src="js/services.js"></script>
     <script src="js/app.js"></script>
     
     <!--

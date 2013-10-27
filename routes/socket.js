@@ -41,10 +41,9 @@ module.exports = function(io) {
 				x: 0, 
 				y: 0
 			},
-			status: {
-				role: 'blue',
-				life: true
-			}
+			role: 'blue',
+			life: true
+
 		};
 		scores[socket.id] = {
 			nick: "hodor",

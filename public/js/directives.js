@@ -3,43 +3,18 @@
 /* Directives */
 
 angular.module('devFest.directives', []).
-  directive('moveReceptor', function () {
-    return {
-        restrict:'A',
-    	link: function(scope, element, attrs){
-    		var relative = {
-    			x: 0,
-    			y: 0
-    		};
-    		element.on('keyup', function(e){
-    			switch(e.keyCode){
-    				case '65': //left
-    				case '68': //right
-    					relative.x = 0;
-    					break;
-  					case '87': //up
-  					case '83': //down
-  						relative.y = 0;
-    					break;
-    			}
-        });
-        element.on('keydown', function(e){
-    			switch(e.keyCode){
-    				case '65': //left
-    					relative.x = -1;
-    					break;
-    				case '68': //right
-    					relative.x = 1;
-    					break;
-  					case '87': //up
-  						relative.y = 1;
-    					break;
-  					case '83': //down
-  						relative.y = -1;
-    					break;
-    			}
-    			scope.move(relative);
-        });
-    	}
-    }
-  });
+    directive('player', function () {
+        return {
+            restrict:'E',
+            scope: {
+                'status': '='
+            },
+            link: function(scope, element, attrs){
+                element.css({'left': scope.status.pos.x, 'top': scope.status.pos.y})
+            },
+            template:'<div ng-switch="status.live">' +
+                '<img ng-switch-when="true" ng-src="img/characters/{{status.role}}.png" alt="" class="player"/>' +
+                '<img ng-switch-when="false" ng-src="img/characters/blood.png" alt="" class="player"/>' +
+                '</div>'
+        }
+    });
