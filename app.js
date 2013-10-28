@@ -3,7 +3,7 @@
  * Dependencias
  */
 
-var express = require('express');
+var express = new require('express');
 var http = require('http');
 var path = require('path');
 var MemoryStore = express.session.MemoryStore;
