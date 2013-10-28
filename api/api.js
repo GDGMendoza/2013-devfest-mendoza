@@ -9,28 +9,12 @@ module.exports = function(app){ //login gestionado por acá
     //Informacion de un usuario por su ID
 	app.get('/api/user/:id', user.getUser);
 
-	app.get('/api/cheatscore/:id', function(req, res){
-		res.json({
-			harcoded: 'json'
-		});		
-	});
+    //Actualizacion de scores
+    app.post('/api/user/:id',user.updateScores);
 
-	app.post('/api/cheatscore', function(req, res){
-		res.json({
-			list: [{harcoded: 'json'}]
-		});		
-	});
+    //Registro de nuevo usuario
+    app.put('/api/user',user.addUser);
 
-	app.put('/api/cheatscore/:id', function(req, res){
-		res.json({
-			list: [{harcoded: 'json'}]
-		});		
-	});
-
-	app.del('/api/cheatscore/:id', function(req, res){
-		res.json({
-			list: [{harcoded: 'json'}]
-		});		
-	});
-
+    //Utilizamos este metodo pra realizar el login
+    app.get('/api/user/login',user.login);
 }

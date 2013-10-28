@@ -12,7 +12,7 @@ var User = {
 
     //Select 1 user
     getUser: function(req, res) {
-        userModel.User.findById(req.param['id'],function (err, user) {
+        userModel.User.findById(req.route.params['id'],function (err, user) {
             if(!err) {
                 if(user){
                     res.json({response:true,user:user});
@@ -26,12 +26,13 @@ var User = {
     },
 
     //Actualizamos al usuario
-    updateUser: function(req, res) {
+    updateScores: function(req, res) {
         if(req.session.user){
             userModel.User.findByIdAndUpdate(req.route.params['id'],
                 {
-                    username:  req.body.username,
-                    email:     req.body.email
+                    kills:  req.body.kills,
+                    deaths:     req.body.deaths,
+                    timeAlive:req.body.timeAlive
                 },function(err) {
                     if(!err) {
                         res.json({response:true});
@@ -56,6 +57,21 @@ var User = {
                 res.json({response:true});
             } else {
                 res.json({err:err});
+            }
+        });
+    },
+
+    //Login de usuarios
+    login: function(req,res){
+        userModel.User.find({email:req.route.params['email'],password:req.route.params['password']},function (err, user) {
+            if(!err) {
+                if(user){
+                    res.json({response:true,user:user});
+                }else{
+                    res.json({response:false,user:user});
+                }
+            } else {
+                res.json({response:false,err:err});
             }
         });
     }
