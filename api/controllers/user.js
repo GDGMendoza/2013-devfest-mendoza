@@ -14,9 +14,13 @@ var User = {
     getUser: function(req, res) {
         userModel.User.findById(req.param['id'],function (err, user) {
             if(!err) {
-                res.json({response:true,user:user});
+                if(user){
+                    res.json({response:true,user:user});
+                }else{
+                    res.json({response:false,user:user});
+                }
             } else {
-                res.json({err:err});
+                res.json({response:false,err:err});
             }
         });
     },

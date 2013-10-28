@@ -26,7 +26,7 @@ var options = {
     db: { native_parser: true },
     server: { poolSize: 5 },
     user: 'devFest', // user de mongodb
-    pass: 'dev2013$' // password de mongodb
+    pass: 'devFest2013$' // password de mongodb
 }; //esto solo si configuraron los usuarios en mongodb.
 
 //Conexion a la base de datos Mongo Db - NoSQL

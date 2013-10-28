@@ -12,7 +12,10 @@ var mongoose = require('mongoose'),
 var userSchema = new Schema({
     username: { type: String, required: true, index: { unique: true }},
     email:    { type: String, required: true, index: { unique: true } },
-    password: { type: String, required: true }
+    password: { type: String, required: true },
+    kills:{type: Number},
+    deaths:{type: Number},
+    timeAlive:{type: Number}
 });
 
 var User = mongoose.model('User', userSchema, 'UserModel');
