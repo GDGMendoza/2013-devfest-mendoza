@@ -1,68 +1,59 @@
+"use strict";
 
 /**
  * Dependencias
  */
 
-var express = new require('express');
-var http = require('http');
-var path = require('path');
-var MemoryStore = express.session.MemoryStore;
-//requiere npm install mongoose
-var mongoose = require('mongoose');
+var http = require('http'),
+    path = require('path'),
+    express = new require('express'),
+    mongoose = require('mongoose'),
+    SessionSockets = require('session.socket.io'),
+    app = express();
 
-var app = express();
-var server = http.createServer(app);
-var io = require('socket.io').listen(server);
 
 /**
  * Configuración
  */
-///// Tener instalado mongodb y hacer npm install mongoose //////////////
-var options = {
+
+// referencias
+var server = http.createServer(app);
+var io = require('socket.io').listen(server);
+var cookieParser = express.cookieParser('game of thrones');
+var sessionStore = new express.session.MemoryStore({reapInterval: 5 * 60 * 1000});
+var sessionSockets = new SessionSockets(io, sessionStore, cookieParser);
+var mongoDBoptions = {
     db: { native_parser: true },
     server: { poolSize: 5 },
     user: 'devFest', // user de mongodb
     pass: 'devFest2013$' // password de mongodb
 }; //esto solo si configuraron los usuarios en mongodb.
 
-//Conexion a la base de datos Mongo Db - NoSQL
-mongoose.connect('mongodb://localhost/devFest',options, function(err, res) {
-    if(err) {
-        console.log('ERROR: connecting to Database. ' + err);
-    } else {
-        console.log('Connected to Database',res);
-    }
-});
-
-//////////////////////// END AUTH //////////////////////////////////
-
-// global
+// configuración global
 app.set('port', process.env.PORT || 3000);
 app.use(express.logger());
-app.use(express.urlencoded()); // bodyParser() va a ser deprecado con la version 3 de connect al salir node 0.12
-app.use(express.json()); // bodyParser() va a ser deprecado con la version 3 de connect al salir node 0.12
-app.use(express.methodOverride()); // habilita la recepción de métodos PUT y DELETE a través de formularios web
-app.use(express.cookieParser());
-app.use(express.session({
-    store: new MemoryStore({
-        reapInterval: 5 * 60 * 1000
-    }), 
-    secret: 'gameofthrones'
-}));
+app.use(express.urlencoded());
+app.use(express.json());
+app.use(express.methodOverride()); //delete y put
+app.use(cookieParser);
+app.use(express.session({ store: sessionStore }));
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     next();
 });
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(app.router); // debe ser la última línea de la configuración global
+app.use(app.router);
+mongoose.connect('mongodb://localhost/devFest', mongoDBoptions, function(err, res) { // Conexion MongoDB
+    err ? console.log('ERROR: connecting to Database. ' + err) : console.log('Connected to Database', res);
+});
 
-// solo desarrollo
+// configuración solo desarrollo
 if ('development' === app.get('env')) {
   app.use(express.errorHandler());
 }
 
-// solo producción
+// configuración solo producción
 if ('production' === app.get('env')) {
   // TODO
 }
@@ -73,7 +64,7 @@ if ('production' === app.get('env')) {
  */
 
 require('./api/api')(app);
-require('./api/socket')(io);
+require('./api/socket')(sessionSockets, io);
 
 
 /**

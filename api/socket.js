@@ -162,14 +162,14 @@ var game = {
     }
 };
 
-module.exports = function (io) {
+module.exports = function (sessionSockets, io) {
 
     game.io = io;
 
-    io.sockets.on('connection', function (socket) {
+    sessionSockets.on('connection', function (err, socket, session) {
 
         // Al conectarse
-        console.log(game.ioCount + ">>> Conexion satisfactoria al socket " + socket.id);
+        console.log(">>> Conexion satisfactoria al socket " + socket.id);
         game.init(socket.id);
 
         // Al desconectarse

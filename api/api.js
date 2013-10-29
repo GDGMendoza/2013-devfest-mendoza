@@ -10,11 +10,11 @@ module.exports = function(app){ //login gestionado por acá
 	app.get('/api/user/:id', user.getUser);
 
     //Actualizacion de scores
-    app.post('/api/user/:id',user.updateScores);
+    app.post('/api/user/:id', user.updateScores);
 
     //Registro de nuevo usuario
-    app.put('/api/user',user.addUser);
+    app.put('/api/user', user.addUser);
 
     //Utilizamos este metodo pra realizar el login
-    app.get('/api/user/login',user.login);
+    app.get('/api/user/login', user.login);
 }

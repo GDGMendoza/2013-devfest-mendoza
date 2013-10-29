@@ -1,14 +1,15 @@
 {
-  "name": "devfest-mean-stack",
-  "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "start": "node app.js"
-  },
-  "dependencies": {
-  	"express": "*",
-  	"socket.io": "*",
-    "mongoose": "*",
-    "oauth2-provider": "*"
-  }
+    "name": "devfest-mean-stack",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "start": "node app.js"
+    },
+    "dependencies": {
+        "express": "*",
+        "socket.io": "*",
+        "mongoose": "*",
+        "oauth2-provider": "*",
+        "session.socket.io": "*"
+    }
 }

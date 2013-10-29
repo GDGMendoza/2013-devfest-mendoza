@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html ng-app="devFest">
+<html ng-app="devFest" ng-controller="GameCtrl" ng-keyup="onKeyUp($event)" ng-keydown="onKeyDown($event)">
 <head>
     <title>DevFest MEAN Stack!</title>
     <meta charset="utf8"/>
     <base href="/"/>
     <link href="css/app.css" rel="stylesheet"/>
 </head>
-<body ng-controller="GameCtrl">
-    <div class="scene" ng-keyup="onKeyUp($event)" ng-keydown="onKeyDown($event)" ng-keypress="onKeyDown($event)">
+<body>
+    <div class="scene">
         <player style="height: 50px; width: 50px; display:block;" ng-repeat="player in players" status="player"></player>
     </div>
     <div id="lobby"><!-- ng-controller="LobbyCtrl" --></div>
