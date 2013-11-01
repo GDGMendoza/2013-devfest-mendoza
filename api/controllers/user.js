@@ -62,15 +62,20 @@ var User = {
     },
 
     //Login de usuarios
-    login: function(req,res){
-        userModel.User.find({email:req.route.params['email'],password:req.route.params['password']},function (err, user) {
+    login: function(req,res,next){
+        userModel.User.findOne({username:req.body.username,password:req.body.password},function (err, user) {
             if(!err) {
                 if(user){
-                    res.json({response:true,user:user});
+                    console.log('USUARIO ENCONTRADO',user);
+                    req.session.user = user._id;
+                    res.writeHead(303, {Location: req.body.next || '/'});
+                    res.end();
                 }else{
+                    console.log('NO SE ENCONTRO EL USUARIO',user);
                     res.json({response:false,user:user});
                 }
             } else {
+                console.log('ERROR',user);
                 res.json({response:false,err:err});
             }
         });

@@ -97,10 +97,12 @@ var game = {
     restartRound: function(mode){
         function initRound(){
             for(var id in game.players.otherPlayers){
-                game.players.otherPlayers[id].alive = true;
-                game.players.otherPlayers[id].role = 'blue';
-                game.players.otherPlayers[id].pos.x = 0;
-                game.players.otherPlayers[id].pos.y = 0;
+                if(id!=undefined){
+                    game.players.otherPlayers[id].alive = true;
+                    game.players.otherPlayers[id].role = 'blue';
+                    game.players.otherPlayers[id].pos.x = 0;
+                    game.players.otherPlayers[id].pos.y = 0;
+                }
             }
             //elegimos un nuevo evilPlayer
             for(var id in game.players.otherPlayers){
