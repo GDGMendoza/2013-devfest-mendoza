@@ -27,15 +27,8 @@ var cookieParser = express.cookieParser('game of thrones');
 var sessionStore = new MemoryStore({reapInterval: 5 * 60 * 1000});
 var sessionSockets = new SessionSockets(io, sessionStore, cookieParser);
 
-var mongoDBoptions = {
-    db: { native_parser: true },
-    server: { poolSize: 5 },
-    user: 'devFest', // user de mongodb
-    pass: 'devFest2013$' // password de mongodb
-}; //esto solo si configuraron los usuarios en mongodb.
-
 //LA CONEXION LA MUEVO ACA, POR QUE NECESITO UN LISTADO DE CLIENTES QUE PUEDAN ACCEDER POR TOQUEN
-mongoose.connect('mongodb://localhost/devFest', mongoDBoptions, function(err, res) { // Conexion MongoDB
+mongoose.connect('mongodb://localhost/devFest', function(err, res) { // Conexion MongoDB
     err ? console.log('ERROR: connecting to Database. ' + err) : console.log('Connected to Database', res);
 });
 ////////////////ACA COMIENZA EL SISTEMA DE LOGEO ///////////////

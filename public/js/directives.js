@@ -10,7 +10,16 @@ angular.module('devFest.directives', [])
                 'status': '='
             },
             link: function(scope, element, attrs){
-                element.css({'left': scope.status.pos.x, 'top': scope.status.pos.y, 'background-color': scope.status.role})
+                //scope.estiloCustom = {};
+                scope.$watch('status.pos.x', function(){
+                    element.css({'left': scope.status.pos.x})
+                });
+                scope.$watch('status.pos.y', function(){
+                    element.css({'top': scope.status.pos.y})
+                });
+                scope.$watch('status.role', function(){
+                    element.css({'background-color': scope.status.role})
+                });
             },
             template:'<div ng-switch="status.alive">' +
                 //'<img ng-switch-when="true" ng-src="img/characters/{{status.role}}.png" alt="" class="player"/>' +

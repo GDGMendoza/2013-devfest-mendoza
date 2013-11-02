@@ -4,6 +4,7 @@
  * Sockets
  */
 
+
 var game = {
 
     //Atributos
@@ -37,31 +38,37 @@ var game = {
                 //checkear limites
             }
             game.players.executeCollisions(socket_id);
-            game.io.sockets.emit('update:player', {}[socket_id] = game.players.toArray()[socket_id]);
+            var aux = {};
+            aux[socket_id] = game.players.toArray()[socket_id];
+            game.io.sockets.emit('update:player', aux);//{}[socket_id] = game.players.toArray()[socket_id]
         },
         toArray: function(){
             var list = game.players.otherPlayers;
             if(game.players.evilPlayer.socket_id && (game.players.evilPlayer.socket_id != 'AFK')) //si tiene socket_id que lo agregue
                 list[game.players.evilPlayer.socket_id] = game.players.evilPlayer;
-            return list;
+            var retorno = [];
+            for(var id in list){
+                retorno.push(list[id]);
+            }
+            return retorno;
         },
         isEvilPlayer: function(socket_id){
             return socket_id == game.players.evilPlayer.socket_id;
         },
         executeCollisions: function(socket_id){
             function collided(player){
-                return player.status.alive && (game.players.evilPlayer.pos.x - player.pos.x < 50) && (game.players.evilPlayer.pos.y - player.pos.y < 50);
+                return player.alive && (game.players.evilPlayer.pos.x - player.pos.x < 50) && (game.players.evilPlayer.pos.y - player.pos.y < 50);
             }
             if(game.players.isEvilPlayer(socket_id)){
                 for(var id in game.players.otherPlayers){
                     if(collided(game.players.otherPlayers[id])){
-                        game.players.otherPlayers[id].status.alive = false;
+                        game.players.otherPlayers[id].alive = false;
                         game.scores.anotherOneBitesTheDust();
                     }
                 }
             } else {
                 if(collided(game.players.otherPlayers[socket_id])){
-                    game.players.otherPlayers[socket_id].status.alive = false;
+                    game.players.otherPlayers[socket_id].alive = false;
                     game.scores.anotherOneBitesTheDust();
                 }
             }
@@ -136,9 +143,9 @@ var game = {
                 game.scores.updateSurvivals();
                 clearTimeout(game.timeout); // corte el timer de la ronda
                 setTimeout(function(){
-                    initRound();
-                    console.log("3 segundos después");
-                }, 3000
+                        initRound();
+                        console.log("3 segundos después");
+                    }, 3000
                 );
                 break;
         }
@@ -173,6 +180,7 @@ module.exports = function (sessionSockets, io) {
         // Al conectarse
         console.log(">>> Conexion satisfactoria al socket " + socket.id);
         game.init(socket.id);
+        console.log(io.sockets);
 
         // Al desconectarse
         socket.on('disconnect', function () {
@@ -182,6 +190,7 @@ module.exports = function (sessionSockets, io) {
         });
 
         // Al moverse un personaje - Núcleo del jueguito
+
         socket.on('move', function (relative) {
             console.log(">>> Movimiento satisfactorio al socket " + socket.id);
             game.players.move(socket.id, relative);

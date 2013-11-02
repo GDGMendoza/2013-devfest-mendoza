@@ -15,47 +15,54 @@ angular.module('devFest.controllers', [])
         $scope.relative = { x: 0, y: 0 };
 
         $scope.onKeyUp = function($event){
-            console.log($event);
+            console.log($event.keyCode);
             switch($event.keyCode){
-                case '65': //left
-                case '68': //right
+                case 65: //left
+                case 68: //right
                     $scope.relative.x = 0;
+                    socket.emit('move', $scope.relative);
                     break;
-                case '87': //up
-                case '83': //down
+                case 87: //up
+                case 83: //down
                     $scope.relative.y = 0;
+                    socket.emit('move', $scope.relative);
                     break;
             }
-            socket.emit('move', $scope.relative);
+
         }
 
         $scope.onKeyDown = function($event){
-            console.log($event);
+            console.log($event.keyCode);
             switch($event.keyCode){
-                case '65': //left
+                case 65: //left
                     $scope.relative.x = -1;
+                    socket.emit('move', $scope.relative);
                     break;
-                case '68': //right
+                case 68: //right
                     $scope.relative.x = 1;
+                    socket.emit('move', $scope.relative);
                     break;
-                case '87': //up
+                case 87: //up
                     $scope.relative.y = 1;
+                    socket.emit('move', $scope.relative);
                     break;
-                case '83': //down
+                case 83: //down
                     $scope.relative.y = -1;
+                    socket.emit('move', $scope.relative);
                     break;
             }
-            socket.emit('move', $scope.relative);
         }
 
         function onUpdate(){
             socket.on('players', function (data) {
                 $scope.players = data;
+                console.log(data);
             });
             socket.on('update:player', function (data) {
                 for(var id in data){ // data es un único elemento que actualizamos en el json
                     $scope.players[id] = data;
                 }
+                console.log(data);
             });
         }
 
