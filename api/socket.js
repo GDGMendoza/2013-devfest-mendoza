@@ -31,16 +31,28 @@ var game = {
             if(game.players.isEvilPlayer(socket_id)){
                 game.players.evilPlayer.pos.x += 5 * relative.x;
                 game.players.evilPlayer.pos.y += 5 * relative.y;
+                console.log("moviendose: x = "+game.players.evilPlayer.pos.x+" - y = "+game.players.evilPlayer.pos.y);
                 //checkear limites
             } else {
                 game.players.otherPlayers[socket_id].pos.x += 5 * relative.x;
                 game.players.otherPlayers[socket_id].pos.y += 5 * relative.y;
+                console.log("moviendose: x = "+game.players.evilPlayer.pos.x+" - y = "+game.players.evilPlayer.pos.y);
                 //checkear limites
             }
             game.players.executeCollisions(socket_id);
             var aux = {};
+            console.log("move player update game.players")
+            console.log(game.players);
+
+            aux[game.players.evilPlayer.socket_id] = game.players.evilPlayer;
+            for(var item in game.players.otherPlayers) aux[item] = game.players.otherPlayers[item];
+            console.log("luego de agregarlos al aux")
+            console.log(aux)
+            /*
             aux[socket_id] = game.players.toArray()[socket_id];
-            game.io.sockets.emit('update:player', aux);//{}[socket_id] = game.players.toArray()[socket_id]
+            console.log("aux luego de haberse pasado a to array")
+            console.log(aux)*/
+            game.io.sockets.emit('update:player', aux);//aux);//{}[socket_id] = game.players.toArray()[socket_id]
         },
         toArray: function(){
             var list = game.players.otherPlayers;

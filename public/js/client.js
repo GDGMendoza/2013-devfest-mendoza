@@ -21,7 +21,7 @@ function Operations(){
     /*
         Todas las escuchas de los sockets
      */
-    this.heardSockets = function(){
+    self.heardSockets = function(){
 
         /*
             Cuando hay un nuevo player lo apendeamos al escenario
@@ -71,6 +71,8 @@ function Operations(){
             Nos muestra el movimiento de un usuario
          */
         conn.on('moveRemotePlayer',function(y,x,playerId){
+            console.log("moveRemotePlayer en client.js")
+            console.log("x: "+x+" - y: "+y+" - playerId: "+playerId);
             if(playerId != self.playerId){
                 var remotePlayer = $('#'+playerId);
                 remotePlayer.css('left',x+'px');
@@ -94,7 +96,7 @@ function Operations(){
     /*
         Acciones de teclas del player
      */
-    this.keyboard = function(){
+    self.keyboard = function(){
 
         var up = false;
         var down = false;
@@ -173,7 +175,7 @@ function Operations(){
     /*
         Metodo que ejecuta un movimiento segun el requerimiento.
      */
-    this.move = function(dir){
+    self.move = function(dir){
 
         var x = self.playerObjt.offset().left;
         var y = self.playerObjt.offset().top;
@@ -248,7 +250,7 @@ function Operations(){
         }
     };
 
-    this.collision = function(playerId,x,y){
+    self.collision = function(playerId,x,y){
         var move = false;
         for(u in playersList){
             //Chequeando que no soy yo el player
@@ -264,7 +266,7 @@ function Operations(){
     /*
         Agregamos los usuarios a las estadisticas
      */
-    this.addUserToStats = function(playerId){
+    self.addUserToStats = function(playerId){
         var player = $('#'+playerId);
         var x = player.offset().left;
         var y = player.offset().top;
@@ -275,7 +277,7 @@ function Operations(){
     /*
         Actualizamos la posicion de los usuarios
      */
-    this.updateUserToStats = function(playerId){
+    self.updateUserToStats = function(playerId){
         var player = $('#'+playerId);
         var x = player.offset().left;
         var y = player.offset().top;
@@ -286,7 +288,7 @@ function Operations(){
     /*
         Agregamos al nuevo player a la lista de usuarios
      */
-    this.addUserToArrayPlayers = function(playerId,x,y){
+    self.addUserToArrayPlayers = function(playerId,x,y){
 
         var playerIn = false;
         for(u in playersList){
@@ -303,7 +305,7 @@ function Operations(){
     /*
         Eliminamos un determinado player de la lista
      */
-    this.removeUserToArrayPlayers = function(playerId){
+    self.removeUserToArrayPlayers = function(playerId){
         for(u in playersList){
             if(playersList[u].playerId == playerId){
                 delete playersList[u];
@@ -314,7 +316,7 @@ function Operations(){
     /*
         Actualizamos un player de la lista de players
      */
-    this.updateUserToArrayPlayers = function(playerId,x,y){
+    self.updateUserToArrayPlayers = function(playerId,x,y){
 
         for(u in playersList){
             if(playersList[u].playerId == playerId){
