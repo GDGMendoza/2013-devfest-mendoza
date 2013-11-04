@@ -43,11 +43,11 @@ angular.module('devFest.controllers', [])
                     socket.emit('move', $scope.relative);
                     break;
                 case 87: //up
-                    $scope.relative.y = -1;
+                    $scope.relative.y = 1;
                     socket.emit('move', $scope.relative);
                     break;
                 case 83: //down
-                    $scope.relative.y = 1;
+                    $scope.relative.y = -1;
                     socket.emit('move', $scope.relative);
                     break;
             }

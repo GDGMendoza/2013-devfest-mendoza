@@ -1,12 +1,7 @@
-/**
- * Created with JetBrains PhpStorm.
- * User: Claudio
- * Date: 04/10/13
- * Time: 11:16
- * To change this template use File | Settings | File Templates.
- */
+
 //Traemos el modelo de base de datos
 var userModel = require('../models/userModel.js');
+
 //Controller de usuarios
 var User = {
 

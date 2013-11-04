@@ -43,18 +43,29 @@ var io = {},
                         }
                     }
                 }
-
-                //chequear limites de canvas
-                if(game.players.isEvilPlayer(target_id)){
+                function moveIntent(){
                     game.players.list[target_id].pos.x += 5 * (relative.x == 0 ? 0 : (relative.x > 0 ? 1 : -1));
-                    game.players.list[target_id].pos.y += 5 * (relative.y == 0 ? 0 : (relative.y > 0 ? 1 : -1));
+                    game.players.list[target_id].pos.y += 5 * (relative.y == 0 ? 0 : (relative.y > 0 ? -1 : 1));
+
+                    if(game.players.list[target_id].pos.x<0)
+                        game.players.list[target_id].pos.x = 0;
+                    else if(game.players.list[target_id].pos.x>750)
+                        game.players.list[target_id].pos.x = 750;
+
+                    if(game.players.list[target_id].pos.y<0)
+                        game.players.list[target_id].pos.y = 0;
+                    else if(game.players.list[target_id].pos.y>550)
+                        game.players.list[target_id].pos.y = 550;
+                }
+
+                if(game.players.isEvilPlayer(target_id)){
+                    moveIntent();
                     for(var id in game.players.list){
                         killIntent(id);
                     }
                 } else {
                     if(game.players.list[target_id].alive){
-                        game.players.list[target_id].pos.x += 5 * (relative.x == 0 ? 0 : (relative.x > 0 ? 1 : -1));
-                        game.players.list[target_id].pos.y += 5 * (relative.y == 0 ? 0 : (relative.y > 0 ? 1 : -1));
+                        moveIntent();
                         killIntent(target_id);
                     }
                 }

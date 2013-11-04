@@ -7,15 +7,9 @@ body{
     width: 100%;
     height: 100%;
 }
-/*.player{
-	width:10px; 
-	height: 10px; 
-	background-color: #999999; 
-	position: absolute;
-}*/
 .scene{
-	width: 504px; 
-	height: 504px; 
+	width: 800px;
+	height: 600px;
 	border: thin #777777 solid; 
 	float: left;
     position: relative;
