@@ -10,93 +10,81 @@ var io = {},
         //Atributos
         timeout: {},
         shutdown: false,
+        evil_id: null,
         players: {
             list: {},
-            evil_id: null,
-            evilPlayer: {socket_id: null},
-            otherPlayers:{},
-            push: function(socket_id, player){
-                game.players.otherPlayers[socket_id] = player;
-                io.sockets.emit('players', game.players.toArray());
+            push: function(target_id, player){
+                game.players.list[target_id] = player;
+                io.sockets.emit('players', game.players.list);
             },
-            remove: function(socket_id){
-                if(game.players.isEvilPlayer(socket_id)){
-                    game.players.evilPlayer = {socket_id: null};
+            remove: function(target_id){
+                delete game.players.list[target_id];
+                if(game.players.isEvilPlayer(target_id)){
+                    game.evil_id = null;
                     game.restartRound("AFK");
-                } else {
-                    delete game.players.otherPlayers[socket_id];
                 }
-                io.sockets.emit('players', game.players.toArray());
+                io.sockets.emit('players', game.players.list);
             },
-            move: function(socket_id, relative) {
-                function collided(player){
-                    if (game.players.evilPlayer.pos != undefined){
-                        return player.alive && (game.players.evilPlayer.pos.x - player.pos.x < 50) && (game.players.evilPlayer.pos.y - player.pos.y < 50);
-                    }
-                    return false;
-                }
-                if(game.players.isEvilPlayer(socket_id)){
-                    //chequear limites de canvas
-                    game.players.evilPlayer.pos.x += 5 * relative.x; //es cheateable
-                    game.players.evilPlayer.pos.y += 5 * relative.y;
-                    for(var id in game.players.otherPlayers){
-                        if(collided(game.players.otherPlayers[id])){
-                            game.players.otherPlayers[id].alive = false;
-                            game.players.otherPlayers[id].role = 'green';
-                            //lista única y en vez de tener un evilPlayer, reemplazar con evilPlayerId
-                            game.scores.anotherOneBitesTheDust();
-                        }
-                    }
-                } else {
-                    if(game.players.otherPlayers[socket_id].alive){
-                        //chequear limites de canvas
-                        game.players.otherPlayers[socket_id].pos.x += 5 * relative.x;
-                        game.players.otherPlayers[socket_id].pos.y += 5 * relative.y;
-                        if(collided(game.players.otherPlayers[socket_id])){
-                            game.players.otherPlayers[socket_id].alive = false;
-                            game.players.otherPlayers[socket_id].role = 'green';
-                            game.scores.anotherOneBitesTheDust();
-                        }
-                    }
-                }
-                //game.players.executeCollisions(socket_id);
+            move: function(target_id, relative) {
+                function killIntent(id){
+                    if(!game.players.isEvilPlayer(id)){ // para que no se intente matar a si mismo :P
+                        var player = game.players.list[id];
+                        var evilPlayer = game.players.list[game.evil_id];
+                        if(player.alive && (evilPlayer.pos.x - player.pos.x < 50) && (evilPlayer.pos.y - player.pos.y < 50)){
+                            game.players.list[id].alive = false;
+                            game.players.list[id].role = 'green';
 
-                var retorno = {};
-                retorno[socket_id] = game.players.toArray()[socket_id];
-                io.sockets.emit('update:player', retorno);
+                            var wrapper = {};
+                            wrapper[id] = game.players.list[id];
+                            io.sockets.emit('update:player', wrapper);
+                            game.scores.anotherOneBitesTheDust();
+                        }
+                    }
+                }
+
+                //chequear limites de canvas
+                if(game.players.isEvilPlayer(target_id)){
+                    game.players.list[target_id].pos.x += 5 * relative.x;
+                    game.players.list[target_id].pos.y += 5 * relative.y;
+                    for(var id in game.players.list){
+                        killIntent(id);
+                    }
+                } else {
+                    if(game.players.list[target_id].alive){
+                        game.players.list[target_id].pos.x += 5 * relative.x;
+                        game.players.list[target_id].pos.y += 5 * relative.y;
+                        killIntent(target_id);
+                    }
+                }
+
+                var wrapper = {};
+                wrapper[target_id] = game.players.list[target_id];
+                io.sockets.emit('update:player', wrapper);
             },
-            toArray: function(){
-                var list = game.players.otherPlayers;
-                if(game.players.evilPlayer.socket_id) //&& (game.players.evilPlayer.socket_id != 'AFK') si tiene socket_id que lo agregue
-                    list[game.players.evilPlayer.socket_id] = game.players.evilPlayer;
-                return list;
-            },
-            isEvilPlayer: function(socket_id){
-                return socket_id == game.players.evilPlayer.socket_id;
+            isEvilPlayer: function(target_id){
+                return game.evil_id == target_id;
             }
         },
         scores:{
             list: {},
-            push: function(socket_id, score){
-                game.scores.list[socket_id] = score;
+            push: function(target_id, score){
+                game.scores.list[target_id] = score;
                 io.sockets.emit('scores', game.scores.list);
-
             },
-            remove: function(socket_id){
-                delete game.scores.list[socket_id];
+            remove: function(target_id){
+                delete game.scores.list[target_id];
                 io.sockets.emit('scores', game.scores.list);
             },
             anotherOneBitesTheDust: function(){
-                var evil_id = game.players.evilPlayer.socket_id;
-                game.scores.list[evil_id].kill_score++;
+                game.scores.list[game.evil_id].kill_score++;
 
-                var retorno = {};
-                retorno[evil_id] = game.scores.list[evil_id];
-                io.sockets.emit('update:score', retorno);
+                var wrapper = {};
+                wrapper[game.evil_id] = game.scores.list[game.evil_id];
+                io.sockets.emit('update:score', wrapper);
             },
             updateSurvivals: function(){
-                for(var id in game.otherPlayers){
-                    if(game.otherPlayers[id].alive){
+                for(var id in game.players.list){
+                    if(!game.players.isEvilPlayer(id) && game.players.list[id].alive){
                         game.scores.list[id].survival_score++;
                     }
                 }
@@ -109,25 +97,24 @@ var io = {},
         restartRound: function(mode){
             function initRound(){
                 //reiniciamos a los jugadores
-                for(var id in game.players.otherPlayers){
-                    game.players.otherPlayers[id].alive = true;
-                    game.players.otherPlayers[id].role = 'blue';
-                    game.players.otherPlayers[id].pos.x = 0;
-                    game.players.otherPlayers[id].pos.y = 0;
+                for(var id in game.players.list){
+                    game.players.list[id].alive = true;
+                    game.players.list[id].role = 'blue';
+                    game.players.list[id].pos.x = 0;
+                    game.players.list[id].pos.y = 0;
                 }
 
                 //elegimos un nuevo evilPlayer
-                for(var id in game.players.otherPlayers){
-                    game.players.evilPlayer = game.players.otherPlayers[id];
-                    game.players.evilPlayer.role = 'red';
-                    game.players.evilPlayer.pos.x = 100;
-                    game.players.evilPlayer.pos.y = 100;
-                    delete game.players.otherPlayers[id];
+                for(var id in game.players.list){
+                    game.evil_id = id;
+                    game.players.list[game.evil_id].role = 'red';
+                    game.players.list[game.evil_id].pos.x = 100;
+                    game.players.list[game.evil_id].pos.y = 100;
                     break;
                 }
 
                 //actualizamos los datos de los players
-                io.sockets.emit('players', game.players.toArray());
+                io.sockets.emit('players', game.players.list);
 
                 //iniciamos secuencia de reinicio de ronda
                 game.timeout = setTimeout(function(){
@@ -143,13 +130,12 @@ var io = {},
                     break;
                 case "NORMAL":
                     game.scores.updateSurvivals();
-                    game.players.otherPlayers[game.players.evilPlayer.socket_id] = game.players.evilPlayer;
-                    game.players.evilPlayer = {socket_id: null};
+                    game.evil_id = null;
                     initRound();
                     break;
                 case "AFK":
                     console.log("se desconecto el malo");
-                    io.sockets.emit('players', game.players.toArray()); //en 3 segundos se reinicia la ronda
+                    io.sockets.emit('players', game.players.list); //en 3 segundos se reinicia la ronda
                     game.scores.updateSurvivals();
                     clearTimeout(game.timeout); // corte el timer de la ronda
                     setTimeout(function(){
@@ -160,10 +146,10 @@ var io = {},
                     break;
             }
         },
-        init: function(socket_id){
-            game.players.push(socket_id, {
+        init: function(target_id){
+            game.players.push(target_id, {
                 id: false,
-                socket_id: socket_id,
+                socket_id: target_id,
                 pos: {
                     x: 0,
                     y: 0
@@ -171,12 +157,12 @@ var io = {},
                 role: 'blue',
                 alive: true
             });
-            game.scores.push(socket_id, {
+            game.scores.push(target_id, {
                 nick: "hodor",
                 kill_score: 0,
                 survival_score: 0
             });
-            if(!game.players.evilPlayer.socket_id) //arrancar el juego si todavía no empieza
+            if(!game.evil_id) //arrancar el juego si todavía no empieza
                 game.restartRound("INIT");
         }
     };
