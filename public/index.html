@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="scene">
-        <player ng-repeat="player in players" status="player"></player>
+        <player ng-style="dynamicStyle" ng-repeat="player in players" status="player"></player>
     </div>
     <div id="lobby"><!-- ng-controller="LobbyCtrl" --></div>
     <div class="stats"><!-- ng-controller="ScoresCtrl" --></div>

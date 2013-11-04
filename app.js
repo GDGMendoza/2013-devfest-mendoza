@@ -20,7 +20,7 @@ var http = require('http'),
 
 // referencias
 var server = http.createServer(app);
-var io = require('socket.io').listen(server);
+var io = require('socket.io').listen(server, {log: false}); //deshabilitamos el puto log
 
 //Variables de entorno de session tanto para http como para socket
 var cookieParser = express.cookieParser('game of thrones');

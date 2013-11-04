@@ -30,7 +30,9 @@ var io = {},
                     if(!game.players.isEvilPlayer(id)){ // para que no se intente matar a si mismo :P
                         var player = game.players.list[id];
                         var evilPlayer = game.players.list[game.evil_id];
-                        if(player.alive && (evilPlayer.pos.x - player.pos.x < 50) && (evilPlayer.pos.y - player.pos.y < 50)){
+                        if(player.alive && (evilPlayer.pos.x - player.pos.x > -50) && (evilPlayer.pos.x - player.pos.x < 50)
+                            && (evilPlayer.pos.y - player.pos.y > -50) && (evilPlayer.pos.y - player.pos.y < 50)){
+
                             game.players.list[id].alive = false;
                             game.players.list[id].role = 'green';
 
@@ -44,15 +46,15 @@ var io = {},
 
                 //chequear limites de canvas
                 if(game.players.isEvilPlayer(target_id)){
-                    game.players.list[target_id].pos.x += 5 * relative.x;
-                    game.players.list[target_id].pos.y += 5 * relative.y;
+                    game.players.list[target_id].pos.x += 5 * (relative.x == 0 ? 0 : (relative.x > 0 ? 1 : -1));
+                    game.players.list[target_id].pos.y += 5 * (relative.y == 0 ? 0 : (relative.y > 0 ? 1 : -1));
                     for(var id in game.players.list){
                         killIntent(id);
                     }
                 } else {
                     if(game.players.list[target_id].alive){
-                        game.players.list[target_id].pos.x += 5 * relative.x;
-                        game.players.list[target_id].pos.y += 5 * relative.y;
+                        game.players.list[target_id].pos.x += 5 * (relative.x == 0 ? 0 : (relative.x > 0 ? 1 : -1));
+                        game.players.list[target_id].pos.y += 5 * (relative.y == 0 ? 0 : (relative.y > 0 ? 1 : -1));
                         killIntent(target_id);
                     }
                 }
@@ -187,7 +189,7 @@ module.exports = function (sessionSockets, ref_io) {
         // Al moverse un personaje - Núcleo del jueguito
         socket.on('move', function (relative) {
             game.players.move(socket.id, relative);
-            console.log(">>> Movimiento satisfactorio al socket " + socket.id);
+            //console.log(">>> Movimiento satisfactorio al socket " + socket.id);
         });
 
     });
