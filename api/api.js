@@ -6,11 +6,6 @@ module.exports = function(app){ //login gestionado por acá
     //Manejo de datos del usuario
     var user = require('./controllers/user.js');
 
-    app.get('/',function(err,res){
-        res.json({battlepro:true});
-    });
-
-    //OAUTH Verification
     app.get('/login', function(req, res, next) {
         if(req.session.user) {
             res.writeHead(303, {Location: '/'});
@@ -20,7 +15,21 @@ module.exports = function(app){ //login gestionado por acá
         res.end('<html><form method="post" action="/login"><input type="hidden" name="next" value="' + next_url + '"><input type="text" placeholder="username" name="username"><input type="password" placeholder="password" name="password"><button type="submit">Login</button></form>');
     });
 
-    app.post('/login', user.login);
+    app.post('/login', function(req, res, next){
+        var parametros = {
+            username: req.body.username,
+            password: req.body.password
+        };
+        user.login(parametros, function(retorno){
+            if(retorno.response){
+                req.session.user = retorno.user._id;
+                res.writeHead(303, {Location: req.body.next || '/'});
+                res.end();
+            } else {
+                res.json(retorno);
+            }
+        });
+    });
 
     app.get('/logout', function(req, res, next) {
         req.session.destroy(function(err) {
@@ -31,15 +40,39 @@ module.exports = function(app){ //login gestionado por acá
 
 
     //Informacion de un usuario por su ID
-	app.get('/api/user/:id', user.getUser);
+    app.get('/api/user/:id', function(req, res){
+        var parametros = { id: req.route.params['id'] };
+        user.getUser(parametros, function(retorno){
+            res.json(retorno);
+        });
+    });
 
     //Actualizacion de scores
-    app.post('/api/user/:id', user.updateScores);
+    app.post('/api/user/:id', function(req, res){
+        var parametros = {
+            id: req.route.params['id'],
+            kill_score: req.body.kill_score,
+            survival_score: req.body.survival_score
+        };
+        if(req.session.user){
+            user.updateScores(parametros, function(retorno){
+                res.json(retorno);
+            });
+        } else {
+            res.json({ response: false, access: 'denied' })
+        }
+    });
 
     //Registro de nuevo usuario
-    app.put('/api/user', user.addUser);
-
-    //Utilizamos este metodo pra realizar el login
-    app.get('/api/user/login', user.login);
+    app.put('/api/user', function(req, res){
+        var parametros = {
+            username: req.body.username,
+            email: req.body.email,
+            password: req.body.password
+        };
+        user.addUser(parametros, function(retorno){
+            res.json(retorno);
+        });
+    });
 
 };

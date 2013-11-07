@@ -5,23 +5,92 @@
     <meta charset="utf8"/>
     <base href="/"/>
     <link href="css/app.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="bower_components/bootstrap/docs/assets/css/bootstrap.css"/>
+    <link rel="stylesheet" href="bower_components/bootstrap/docs/assets/css/bootstrap-responsive.css"/>
 </head>
 <body>
+
+<body>
+<!-- Dynamic Content -->
+<div id="main-container" class="row-fluid">
+
     <div class="scene">
-        <player ng-style="dynamicStyle" ng-repeat="player in players" status="player"></player>
+        <!--<player ng-style="dynamicStyle" ng-repeat="player in players" status="player"></player>-->
+    </div>
+    <div id="menuContainer">
+        <div id="menu" class="pagination-centered">
+            <h3>Play!</h3>
+            <h3>Login</h3>
+            <h3>About</h3>
+            <h3>Top Scores</h3>
+        </div>
+        <div id="loginContainer" class="active">
+            <form class="form-horizontal" name="loginForm">
+                <div class="control-group">
+                    <label class="control-label" >Email</label>
+                    <div class="controls">
+                        <input type="text" placeholder="Email">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" >Password</label>
+                    <div class="controls">
+                        <input type="password" placeholder="Password">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <button class="btn">Log in</button>
+                    </div>
+                </div>
+            </form>
+            <form class="form-horizontal" name="registerForm">
+                <div class="control-group">
+                    <label class="control-label">Username</label>
+                    <div class="controls">
+                        <input type="text"  placeholder="Username">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Email</label>
+                    <div class="controls">
+                        <input type="text"  placeholder="Email">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" >Password</label>
+                    <div class="controls">
+                        <input type="password"  placeholder="Password">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <button class="btn">Log in</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="aboutContainer">
+
+        </div>
+        <div id="topScoresContainer">
+
+        </div>
     </div>
     <div id="lobby"><!-- ng-controller="LobbyCtrl" --></div>
     <div class="stats"><!-- ng-controller="ScoresCtrl" --></div>
-    <div style="clear: both;"></div>
 
-	<!-- Dependencias y Módulos -->
-    <script src="socket.io/socket.io.js"></script>
-    <script src="bower_components/angular/angular.js"></script>
-    <script src="bower_components/angular-socket-io/socket.js"></script>
-    <script src="js/controllers.js"></script>
-    <script src="js/directives.js"></script>
-    <script src="js/services.js"></script>
-    <script src="js/app.js"></script>
+</div>
+
+
+<!-- Dependencias y Módulos -->
+<script src="socket.io/socket.io.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-socket-io/socket.js"></script>
+<script src="js/controllers.js"></script>
+<script src="js/directives.js"></script>
+<script src="js/services.js"></script>
+<script src="js/app.js"></script>
 
 </body>
 </html>
