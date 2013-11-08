@@ -14,6 +14,40 @@ angular.module('devFest.controllers', [])
 
         $scope.relative = { x: 0, y: 0 };
 
+        $scope.menu = {status:{main:'active',login:'',about:'',scores:''}};
+        $scope.setMenu = function(menu){
+            switch (menu){
+                case 'main':
+                    if($scope.menu.status.main != 'active'){
+                        $scope.menu = {status:{main:'active',login:'',about:'',scores:''}};
+                    }else{
+                        $scope.menu.status.main = '';
+                    }
+                    break;
+                case 'login':
+                    if($scope.menu.status.login != 'active'){
+                        $scope.menu = {status:{main:'active',login:'active',about:'',scores:''}};
+                    }else{
+                        $scope.menu.status.login = '';
+                    }
+                    break;
+                case 'about':
+                    if($scope.menu.status.about != 'active'){
+                        $scope.menu = {status:{main:'active',login:'',about:'active',scores:''}};
+                    }else{
+                        $scope.menu.status.about = '';
+                    }
+                    break;
+                case 'scores':
+                    if($scope.menu.status.scores != 'active'){
+                        $scope.menu = {status:{main:'active',login:'',about:'',scores:'active'}};
+                    }else{
+                        $scope.menu.status.scores = '';
+                    }
+                    break;
+            }
+        };
+
         $scope.onKeyUp = function($event){
             console.log($event.keyCode);
             switch($event.keyCode){

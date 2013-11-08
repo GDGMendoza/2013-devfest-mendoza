@@ -9,7 +9,8 @@
     box-sizing:         border-box;
 }
 body{
-    background: black;
+    background: url(../img/westeros.jpg) center center no-repeat;
+    background-size: 100% 100%;
 }
 html,body {
     font-family: 'Open Sans', sans-serif !important;
@@ -21,7 +22,7 @@ html,body {
 
 h1, h2, h3, h4, h5, h6{
     font-weight: bold !important;
-    color: #808080 !important;
+    color: #F5F5F5 !important;
 }
 h1:first-letter, h2:first-letter, h3:first-letter, h4:first-letter, h5:first-letter, h6:first-letter,p:first-letter{
     text-transform: uppercase;
@@ -36,7 +37,6 @@ h1:first-letter, h2:first-letter, h3:first-letter, h4:first-letter, h5:first-let
 #main-container {
     min-height: 100%;
     position: relative;
-    background: #E6E6E6;
 }
 #body{
     padding: 10px 0 225px 0;
@@ -52,53 +52,77 @@ a,h3{
     text-decoration: none !important
 }
 h3:hover{
-    color: rgba(66,133,244,0.8) !important;
+    color: #F7AD2F !important;
 }
 p{
     color: #808080;
 }
 #menuContainer,#menu,#loginContainer,#aboutContainer,#topScoresContainer{
-    width: 300px;
+    width: 230px;
     height: 100%;
     position: absolute;
-    left: 0;
+    left: -100%;
     top: 0;
     -webkit-transition: all 0.8s ease-out;
     -moz-transition: all 0.8s ease-out;
     transition: all 0.8s ease-out;
+    color: #F5F5F5;
 }
-#menu{z-index: 7;padding-top: 70px;}
+
+#menu{z-index: 7;padding-top: 110px;}
 #menu h3{cursor: pointer;}
 #loginContainer,#aboutContainer,#topScoresContainer{z-index:6}
-#menuContainer{z-index: 5;background-color: #eaeaea;}
-
+#menuContainer{z-index: 5;background-color: rgba(0,0,0,0.8);}
+#menuContainer.active,#menuContainer.active #menu{left:0px}
 #loginContainer.active,#aboutContainer.active,#topScoresContainer.active{
-    background-color: red;
+    background-color: rgba(0,0,0,0.5);
     left: 100%;
     -webkit-transition: all 0.8s ease-out;
     -moz-transition: all 0.8s ease-out;
     transition: all 0.8s ease-out;
 }
+.loginForm{
+    margin-top: 25px;
 
+}
+.registerForm{
+    
+}
+.btnWesteros{
+    background-color: #BD9042;
+    width: 50%;
+    padding: 5px;
+    margin-left: 25%;
+    margin-right: 25%;
+    box-shadow: inset 0 0 15px #3A3222;
+    color: #3A3222;
+    font-weight: bolder !important;
+    cursor: pointer;
+}
+
+input{
+    border: none !important;
+    background-color: #E7C384 !important;
+    box-shadow: inset 0 0 15px #3A3222 !important;
+    color: #3A3222 !important;
+    font-weight: bolder !important;
+    height: 25px !important;
+}
 .scene{
 	width: 800px;
 	height: 600px;
-    background: url(../img/brick.jpg) center center no-repeat;
+    margin-right: 25%;
+    margin-left:25%;
+	/* background: url(../img/brick.jpg) center center no-repeat; */
     background-size: 800px 600px;
     position: relative;
     z-index: 0;
 }
-/*.stats{
-	width: 200px; 
-	height: 504px; 
-	border: thin #777777 solid; 
-	float: right; 
-	font-size: 10px; 
-	color: #FFFFFF;
-}
 
 player{
+    background: url(../img/arya_stark.png) center center no-repeat;
+    background-size: 50px 50px;
     position: absolute;
     height: 50px;
     width: 50px;
-}*/
+}
