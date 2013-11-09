@@ -3,16 +3,9 @@
 /* Controllers */
 
 angular.module('devFest.controllers', [])
-    /*    .controller('LoginCtrl', function ($scope, $http) {
-     $scope.login = function(){
-     //$location.path("/game");
-     }
-     })*/
-    .controller('GameCtrl', function ($scope, socket, WorldService) {
+    .controller('GameCtrl', function ($scope, $http, socket, WorldService) {
 
-        $scope.players = WorldService.players;
-
-        $scope.relative = { x: 0, y: 0 };
+        //$scope.players = WorldService.players;
 
         $scope.menu = {status:{main:'active',login:'',about:'',scores:''}};
         $scope.setMenu = function(menu){
@@ -21,7 +14,7 @@ angular.module('devFest.controllers', [])
                     if($scope.menu.status.main != 'active'){
                         $scope.menu = {status:{main:'active',login:'',about:'',scores:''}};
                     }else{
-                        $scope.menu.status.main = '';
+                        $scope.menu.status = {main:'',login:'',about:'',scores:''};
                     }
                     break;
                 case 'login':
@@ -47,6 +40,45 @@ angular.module('devFest.controllers', [])
                     break;
             }
         };
+
+        $scope.play = function(){
+            $scope.setMenu("main");
+            socket.emit('newplayer', {});
+        }
+
+        $scope.loginData = { username: "", password: "" };
+
+        $scope.login = function(){
+            if($scope.loginData.username != "" && $scope.loginData.password != ""){
+                $http.post("/login", $scope.loginData).success(function(data){
+                    if(data.response){
+                        $scope.play();
+                    } else {
+                        console.log("Error al logear");
+                    }
+                });
+            }
+
+        }
+
+        $scope.registerData = { username: "", email: "", password: "" };
+
+        $scope.registerAndLogin = function(){
+            if($scope.registerData.username != ""
+                && $scope.registerData.email != ""
+                && $scope.registerData.password != ""){
+
+                $http.post("/api/user", $scope.registerData).success(function(data){
+                    if(data.response){
+                        $scope.play();
+                    } else {
+                        console.log("Error al registrarse");
+                    }
+                });
+            }
+        }
+
+        $scope.relative = { x: 0, y: 0 };
 
         $scope.onKeyUp = function($event){
             console.log($event.keyCode);
@@ -75,6 +107,7 @@ angular.module('devFest.controllers', [])
                 case 68: //right
                     $scope.relative.x = 1;
                     socket.emit('move', $scope.relative);
+                    console.log("derecha enviado " + $scope.relative.x)
                     break;
                 case 87: //up
                     $scope.relative.y = 1;
@@ -99,17 +132,5 @@ angular.module('devFest.controllers', [])
                 console.log('update:player ' + data[id]);
             });
         }
-
         onUpdate();
     });
-/*.controller('ScoreCtrl', function($scope, socket){
- socket.on('scores', function (data) {
- $scope.scores = [];
- var id;
- for (id in data){
- $scope.scores.push(data[id]);
- }
- //$scope.scores = data;
- });
- });
- */

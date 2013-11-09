@@ -120,9 +120,30 @@ input{
 }
 
 player{
-    background: url(../img/arya_stark.png) center center no-repeat;
-    background-size: 50px 50px;
     position: absolute;
     height: 50px;
     width: 50px;
 }
+
+player.arya{ background: url(../img/arya_stark.png) center center no-repeat; background-size: 50px 50px; }
+player.asha{ background: url(../img/asha_greyjoy.png) center center no-repeat; background-size: 50px 50px; }
+player.brienne{ background: url(../img/brienne_of_tarth.png) center center no-repeat; background-size: 50px 50px; }
+player.daenerys{ background: url(../img/daenerys_targaryen.png) center center no-repeat; background-size: 50px 50px; }
+player.eddard{ background: url(../img/eddard_stark.png) center center no-repeat; background-size: 50px 50px; }
+player.jaime{ background: url(../img/jaime_lannister.png) center center no-repeat; background-size: 50px 50px; }
+player.jaquen{ background: url(../img/jaqen_h_ghar.png) center center no-repeat; background-size: 50px 50px; }
+player.joffrey{ background: url(../img/joffrey_baratheon.png) center center no-repeat; background-size: 50px 50px; }
+player.jon{ background: url(../img/jon_snow.png) center center no-repeat; background-size: 50px 50px; }
+player.littlefinger{ background: url(../img/littlefinger.png) center center no-repeat; background-size: 50px 50px; }
+player.melisandre{ background: url(../img/melisandre_of_ashaii.png) center center no-repeat; background-size: 50px 50px; }
+player.osha{ background: url(../img/osha.png) center center no-repeat; background-size: 50px 50px; }
+player.robb{ background: url(../img/robb_stark.png) center center no-repeat; background-size: 50px 50px; }
+player.samwell{ background: url(../img/samwell_tarly.png) center center no-repeat; background-size: 50px 50px; }
+player.sandor{ background: url(../img/sandor_clegane.png) center center no-repeat; background-size: 50px 50px; }
+player.timett{ background: url(../img/timett_son_of_timett.png) center center no-repeat; background-size: 50px 50px; }
+player.tyrion{ background: url(../img/tyrion_lannister.png) center center no-repeat; background-size: 50px 50px; }
+player.tywin{ background: url(../img/tywin_lannister.png) center center no-repeat; background-size: 50px 50px; }
+player.varys{ background: url(../img/varys.png) center center no-repeat; background-size: 50px 50px; }
+player.ygritte{ background: url(../img/ygritte.png) center center no-repeat; background-size: 50px 50px; }
+player.george{ background: url(../img/george.jpg) center center no-repeat; background-size: 50px 50px; }
+player.dead{ background: url(../img/death.jpg) center center no-repeat; background-size: 50px 50px; }

@@ -18,7 +18,7 @@
     </div>
     <div id="menuContainer" class="{{menu.status.main}}">
         <div id="menu" class="pagination-centered">
-            <h3 >Play!</h3>
+            <h3 ng-click="play()">Play!</h3>
             <h3 ng-click="setMenu('login')">Login</h3>
             <h3 ng-click="setMenu('about')">About</h3>
             <h3 ng-click="setMenu('scores')">Top Scores</h3>
@@ -26,39 +26,39 @@
         <div id="loginContainer" class="{{menu.status.login}}">
             <form class="loginForm pagination-centered" name="loginForm">
                 <div class="control-group">
-                    <label class="control-label" >Email</label>
+                    <label class="control-label" >Username</label>
                     <div class="controls">
-                        <input type="text" >
+                        <input ng-model="loginData.username" type="text" >
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" >Password</label>
                     <div class="controls">
-                        <input type="password">
+                        <input ng-model="loginData.password" type="password">
                     </div>
                 </div>
-                <div class="btnWesteros">Log in</div>
+                <div class="btnWesteros" ng-click="login()">Log in</div>
             </form>
             <form class="registerForm pagination-centered" name="registerForm">
                 <div class="control-group">
                     <label class="control-label">Username</label>
                     <div class="controls">
-                        <input type="text" >
+                        <input ng-model="registerData.username" type="text" >
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label">Email</label>
                     <div class="controls">
-                        <input type="text" >
+                        <input ng-model="registerData.email" type="text" >
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" >Password</label>
                     <div class="controls">
-                        <input type="password" >
+                        <input ng-model="registerData.password" type="password" >
                     </div>
                 </div>
-                <div class="btnWesteros">Register</div>
+                <div class="btnWesteros" ng-click="registerAndLogin()">Register</div>
             </form>
         </div>
         <div id="aboutContainer" class="{{menu.status.about}}">
@@ -80,6 +80,8 @@
 <script src="js/directives.js"></script>
 <script src="js/services.js"></script>
 <script src="js/app.js"></script>
+
+<embed src="sounds/song.mp3" loop="true" hidden="true" autostart="true">
 
 </body>
 </html>

@@ -11,8 +11,14 @@ module.exports = function (sessionSockets, ref_io) {
     sessionSockets.on('connection', function (err, socket, session) {
 
         // Al conectarse
-        game.init(socket.id);
+        game.initInfo(socket);
         console.log(">>> Conexion satisfactoria al socket " + socket.id);
+
+        socket.on('newplayer', function(){
+            var realSession = JSON.parse(session.req.sessionStore.sessions[session.id]);
+            game.newplayer(socket.id, realSession.user);
+            console.log(">>> Nuevo player con socket " + socket.id);
+        });
 
         // Al desconectarse
         socket.on('disconnect', function () {

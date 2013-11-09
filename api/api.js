@@ -22,12 +22,10 @@ module.exports = function(app){ //login gestionado por acá
         };
         user.login(parametros, function(retorno){
             if(retorno.response){
-                req.session.user = retorno.user._id;
-                res.writeHead(303, {Location: req.body.next || '/'});
-                res.end();
-            } else {
-                res.json(retorno);
+                req.session.user = retorno.user;//._id
+                console.log('sesion ' + req.session.user);
             }
+            res.json(retorno);
         });
     });
 
@@ -71,6 +69,9 @@ module.exports = function(app){ //login gestionado por acá
             password: req.body.password
         };
         user.addUser(parametros, function(retorno){
+            if(retorno.response){
+                req.session.user = retorno.user._id;
+            }
             res.json(retorno);
         });
     });

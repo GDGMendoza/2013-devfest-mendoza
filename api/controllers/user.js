@@ -66,7 +66,7 @@ var User = {
                 }
             } else {
                 console.log('ERROR',user);
-                callback({ response: false, err: err });
+                callback({ response: false, user: user, err: err });
             }
         });
     }
