@@ -145,5 +145,5 @@ player.tyrion{ background: url(../img/tyrion_lannister.png) center center no-rep
 player.tywin{ background: url(../img/tywin_lannister.png) center center no-repeat; background-size: 50px 50px; }
 player.varys{ background: url(../img/varys.png) center center no-repeat; background-size: 50px 50px; }
 player.ygritte{ background: url(../img/ygritte.png) center center no-repeat; background-size: 50px 50px; }
-player.george{ background: url(../img/george.jpg) center center no-repeat; background-size: 50px 50px; }
-player.dead{ background: url(../img/death.jpg) center center no-repeat; background-size: 50px 50px; }
+player.george{ background: url(../img/martin.png) center center no-repeat; background-size: 50px 50px; }
+player.dead{ background: url(../img/death.png) center center no-repeat; background-size: 50px 50px; }

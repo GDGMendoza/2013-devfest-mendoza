@@ -6,16 +6,20 @@
 
 module.exports = function (sessionSockets, ref_io) {
 
-    var game = require('./controllers/game.js')(ref_io);
-
     sessionSockets.on('connection', function (err, socket, session) {
+
+        console.log("sesionActual " + JSON.stringify(session));
+        var game = require('./controllers/game.js')(ref_io, session);
 
         // Al conectarse
         game.initInfo(socket);
         console.log(">>> Conexion satisfactoria al socket " + socket.id);
 
         socket.on('newplayer', function(){
-            var realSession = JSON.parse(session.req.sessionStore.sessions[session.id]);
+            console.log("sesionSocket " + JSON.stringify(session));
+            if(session){
+                var realSession = JSON.parse(session.req.sessionStore.sessions[session.id]);
+            }
             game.newplayer(socket.id, realSession.user);
             console.log(">>> Nuevo player con socket " + socket.id);
         });

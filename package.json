@@ -9,7 +9,6 @@
         "express": "*",
         "socket.io": "*",
         "mongoose": "*",
-        "oauth2-provider": "*",
         "session.socket.io": "*"
     }
 }

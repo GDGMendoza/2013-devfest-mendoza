@@ -68,7 +68,7 @@ angular.module('devFest.controllers', [])
                 && $scope.registerData.email != ""
                 && $scope.registerData.password != ""){
 
-                $http.post("/api/user", $scope.registerData).success(function(data){
+                $http.post("/register", $scope.registerData).success(function(data){
                     if(data.response){
                         $scope.play();
                     } else {
@@ -128,6 +128,16 @@ angular.module('devFest.controllers', [])
             socket.on('update:player', function (data) {
                 for(var id in data){ // data es un único elemento que actualizamos en el json
                     $scope.players[id] = data[id];
+                }
+                console.log('update:player ' + data[id].role);
+            });
+            socket.on('scores', function (data) {
+                $scope.scores = data;
+                console.log('scores: ' + data);
+            });
+            socket.on('update:score', function (data) {
+                for(var id in data){ // data es un único elemento que actualizamos en el json
+                    $scope.scores[id] = data[id];
                 }
                 console.log('update:player ' + data[id]);
             });

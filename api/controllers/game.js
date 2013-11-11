@@ -1,8 +1,9 @@
 "use strict";
 
-var user = require('./user');
+var userEntity = require('./user');
 
 var io = {},
+    session = {},
     game = {
 
         //Atributos
@@ -93,17 +94,31 @@ var io = {},
                 delete game.scores.list[target_id];
                 io.sockets.emit('scores', game.scores.list);
             },
-            anotherOneBitesTheDust: function(){
+            anotherOneBitesTheDust: function(user){
                 game.scores.list[game.evil_id].kill_score++;
-
+                console.log("user " + JSON.stringify(user));
+                if(user){
+                    userEntity.updateScores({
+                        id: user._id,
+                        kill_score: game.scores.list[game.evil_id].kill_score,
+                        survival_score: game.scores.list[game.evil_id].kill_score
+                    }, function(){});
+                }
                 var wrapper = {};
                 wrapper[game.evil_id] = game.scores.list[game.evil_id];
                 io.sockets.emit('update:score', wrapper);
             },
-            updateSurvivals: function(){
+            updateSurvivals: function(user){
                 for(var id in game.players.list){
                     if(!game.players.isEvilPlayer(id) && game.players.list[id].alive){
                         game.scores.list[id].survival_score++;
+                        if(user){
+                            userEntity.updateScores({
+                                id: user._id,
+                                kill_score: game.scores.list[id].kill_score,
+                                survival_score: game.scores.list[id].kill_score
+                            }, function(){});
+                        }
                     }
                 }
                 io.sockets.emit('scores', game.scores.list);
@@ -115,16 +130,13 @@ var io = {},
         restartRound: function(mode){
             function initRound(){
                 for(var id in game.players.list){
-                    var randomAux = Math.floor(Math.random() * game.players.roles.length - 1);
+                    var randomAux = Math.floor(Math.random() * game.players.roles.length);
 
-                    console.log("Aux " + randomAux);
-                    console.log("Rol " + game.players.roles[randomAux]);
                     game.players.list[id].alive = true;
                     game.players.list[id].role = game.players.roles[randomAux];
                     game.players.list[id].pos.x = Math.floor(Math.random() * 750);
                     game.players.list[id].pos.y = Math.floor(Math.random() * 550);
 
-                    delete game.players.roles[randomAux];
                 }
 
                 //elegimos un nuevo evilPlayer
@@ -139,9 +151,8 @@ var io = {},
                 //actualizamos los datos de los players
                 io.sockets.emit('players', game.players.list);
 
-                //iniciamos secuencia de reinicio de ronda
-                if(game.timeout)
-                    clearTimeout(game.timeout);
+                //limpiamos timer en caso de haber y reiniciamos la ronda
+                clearTimeout(game.timeout);
                 game.timeout = setTimeout(function(){
                     console.log("pasaron 30 segundos");
                     if(!game.shutdown)
@@ -160,15 +171,10 @@ var io = {},
                     break;
                 case "AFK":
                     console.log("se desconecto el malo");
-                    io.sockets.emit('players', game.players.list); //en 3 segundos se reinicia la ronda
+                    io.sockets.emit('players', game.players.list);
                     game.scores.updateSurvivals();
-                    if(game.timeout)
-                        clearTimeout(game.timeout); // corte el timer de la ronda
-                    setTimeout(function(){
-                            initRound();
-                            console.log("3 segundos después");
-                        }, 3000
-                    );
+                    clearTimeout(game.timeout); // corte el timer de la ronda
+                    initRound();
                     break;
             }
         },
@@ -178,10 +184,10 @@ var io = {},
                 socket_id: target_id,
                 nick: user ? user.username : "anon",
                 pos: {
-                    x: 0,
-                    y: 0
+                    x: Math.floor(Math.random() * 750),
+                    y: Math.floor(Math.random() * 550)
                 },
-                role: game.players.roles[Math.floor(Math.random() * game.players.roles.length - 1)],
+                role: game.players.roles[Math.floor(Math.random() * game.players.roles.length)],
                 alive: true
             });
             game.scores.push(target_id, {
@@ -194,7 +200,8 @@ var io = {},
         }
     };
 
-module.exports = function(ref_io){
+module.exports = function(ref_io, ref_session){
     io = ref_io;
+    session = ref_session;
     return game;
 };
