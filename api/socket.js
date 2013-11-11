@@ -1,26 +1,23 @@
-"use strict";
+'use strict';
 
 /**
  * Sockets
  */
 
-module.exports = function (sessionSockets, ref_io) {
+module.exports = function (sessionSockets, io) {
 
     sessionSockets.on('connection', function (err, socket, session) {
 
-        console.log("sesionActual " + JSON.stringify(session));
-        var game = require('./controllers/game.js')(ref_io, session);
+        var game = require('./controllers/game')(io);
 
         // Al conectarse
         game.initInfo(socket);
         console.log(">>> Conexion satisfactoria al socket " + socket.id);
 
-        socket.on('newplayer', function(){
-            console.log("sesionSocket " + JSON.stringify(session));
-            if(session){
-                var realSession = JSON.parse(session.req.sessionStore.sessions[session.id]);
-            }
-            game.newplayer(socket.id, realSession.user);
+        socket.on('new:player', function(){
+            sessionSockets.getSession(socket, function (err, realSession) {
+                game.newPlayer(socket.id, realSession.user?realSession.user:undefined);
+            });
             console.log(">>> Nuevo player con socket " + socket.id);
         });
 

@@ -5,7 +5,7 @@ var userModel = require('../models/userModel.js');
 //Controller de usuarios
 var User = {
     register: function(params, callback) {
-        var newUser = new userModel.User({
+        var newUser = new userModel({
             username: params.username,
             email: params.email,
             password: params.password
@@ -19,7 +19,7 @@ var User = {
         });
     },
     login: function(params, callback){
-        userModel.User.findOne({
+        userModel.findOne({
             username:params.username,
             password:params.password
         }, function (err, user) {
@@ -34,10 +34,20 @@ var User = {
             }
         });
     },
-    updateScores: function(params, callback) {
-        userModel.User.findByIdAndUpdate(params.id, {
-            kill_score: params.kill_score,
-            survival_score: params.survival_score
+    updateKillScore: function(params, callback) {
+        userModel.findByIdAndUpdate(params.id, {
+            killScore: params.killScore
+        }, function(err, user) {
+            if(!err) {
+                callback({ response: true, user: user });
+            } else {
+                callback({ response: false, err: err });
+            }
+        });
+    },
+    updateSurvivalScore: function(params, callback) {
+        userModel.findByIdAndUpdate(params.id, {
+            survivalScore: params.survivalScore
         }, function(err, user) {
             if(!err) {
                 callback({ response: true, user: user });

@@ -3,7 +3,6 @@
 <head>
     <title>DevFest MEAN Stack!</title>
     <meta charset="utf8"/>
-    <base href="/"/>
     <link href="css/app.css" rel="stylesheet"/>
     <link rel="stylesheet" href="bower_components/bootstrap/docs/assets/css/bootstrap.css"/>
     <link rel="stylesheet" href="bower_components/bootstrap/docs/assets/css/bootstrap-responsive.css"/>
@@ -14,7 +13,7 @@
 <div id="main-container" class="row-fluid">
 
     <div class="scene">
-        <player ng-style="dynamicStyle" ng-repeat="player in players" status="player"></player>
+        <player ng-repeat="player in players" status="player"></player>
     </div>
     <div id="menuContainer" class="{{menu.status.main}}">
         <div id="menu" class="pagination-centered">
@@ -68,7 +67,7 @@
             Floatingpoint http://bit.ly/1bfs9Jf
         </div>
         <div id="topScoresContainer" class="{{menu.status.scores}}">
-            <div ng-repeat="score in scores">{{score.nick}} | {{score.kill_score}} - {{score.survival_score}}</div>
+            <div ng-repeat="score in scores">{{score.nick}} | {{score.killScore}} - {{score.survivalScore}}</div>
         </div>
     </div>
 
@@ -81,10 +80,9 @@
 <script src="bower_components/angular-socket-io/socket.js"></script>
 <script src="js/controllers.js"></script>
 <script src="js/directives.js"></script>
-<script src="js/services.js"></script>
 <script src="js/app.js"></script>
 
-<!--<embed src="sounds/song.mp3" loop="true" hidden="true" autostart="true">-->
+<embed src="sounds/song.mp3" loop="true" hidden="true" autostart="true">
 
 </body>
 </html>

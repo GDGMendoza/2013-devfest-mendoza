@@ -4,7 +4,7 @@
 
 module.exports = function(app){
 
-    var user = require('./controllers/user.js');
+    var userCtrl = require('./controllers/user.js');
 
     app.post('/register', function(req, res){
         var parametros = {
@@ -12,7 +12,7 @@ module.exports = function(app){
             email: req.body.email,
             password: req.body.password
         };
-        user.register(parametros, function(retorno){
+        userCtrl.register(parametros, function(retorno){
             if(retorno.response){
                 req.session.user = retorno.user;
             }
@@ -25,10 +25,9 @@ module.exports = function(app){
             username: req.body.username,
             password: req.body.password
         };
-        user.login(parametros, function(retorno){
+        userCtrl.login(parametros, function(retorno){
             if(retorno.response){
                 req.session.user = retorno.user;
-                console.log('sessionHttp ' + JSON.stringify(req.session));
             }
             res.json(retorno);
         });

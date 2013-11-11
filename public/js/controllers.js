@@ -3,9 +3,25 @@
 /* Controllers */
 
 angular.module('devFest.controllers', [])
-    .controller('GameCtrl', function ($scope, $http, socket, WorldService) {
+    .controller('GameCtrl', function ($scope, $http, socket) {
 
-        //$scope.players = WorldService.players;
+        socket.forward(["players", "update:player", "scores", "update:score"], $scope);
+        $scope.$on('socket:players', function(ev, data) {
+            $scope.players = data;
+        });
+        $scope.$on('socket:update:player', function(ev, data) {
+            for(var id in data){ // data es un único elemento que actualizamos en el json
+                $scope.players[id] = data[id];
+            }
+        });
+        $scope.$on('socket:scores', function(ev, data) {
+            $scope.scores = data;
+        });
+        $scope.$on('socket:update:score', function(ev, data) {
+            for(var id in data){ // data es un único elemento que actualizamos en el json
+                $scope.scores[id] = data[id];
+            }
+        });
 
         $scope.menu = {status:{main:'active',login:'',about:'',scores:''}};
         $scope.setMenu = function(menu){
@@ -41,13 +57,7 @@ angular.module('devFest.controllers', [])
             }
         };
 
-        $scope.play = function(){
-            $scope.setMenu("main");
-            socket.emit('newplayer', {});
-        }
-
         $scope.loginData = { username: "", password: "" };
-
         $scope.login = function(){
             if($scope.loginData.username != "" && $scope.loginData.password != ""){
                 $http.post("/login", $scope.loginData).success(function(data){
@@ -59,10 +69,9 @@ angular.module('devFest.controllers', [])
                 });
             }
 
-        }
+        };
 
         $scope.registerData = { username: "", email: "", password: "" };
-
         $scope.registerAndLogin = function(){
             if($scope.registerData.username != ""
                 && $scope.registerData.email != ""
@@ -76,10 +85,9 @@ angular.module('devFest.controllers', [])
                     }
                 });
             }
-        }
+        };
 
         $scope.relative = { x: 0, y: 0 };
-
         $scope.onKeyUp = function($event){
             console.log($event.keyCode);
             switch($event.keyCode){
@@ -95,8 +103,7 @@ angular.module('devFest.controllers', [])
                     break;
             }
 
-        }
-
+        };
         $scope.onKeyDown = function($event){
             console.log($event.keyCode);
             switch($event.keyCode){
@@ -107,7 +114,6 @@ angular.module('devFest.controllers', [])
                 case 68: //right
                     $scope.relative.x = 1;
                     socket.emit('move', $scope.relative);
-                    console.log("derecha enviado " + $scope.relative.x)
                     break;
                 case 87: //up
                     $scope.relative.y = 1;
@@ -118,29 +124,11 @@ angular.module('devFest.controllers', [])
                     socket.emit('move', $scope.relative);
                     break;
             }
-        }
+        };
 
-        function onUpdate(){
-            socket.on('players', function (data) {
-                $scope.players = data;
-                console.log('players: ' + data);
-            });
-            socket.on('update:player', function (data) {
-                for(var id in data){ // data es un único elemento que actualizamos en el json
-                    $scope.players[id] = data[id];
-                }
-                console.log('update:player ' + data[id].role);
-            });
-            socket.on('scores', function (data) {
-                $scope.scores = data;
-                console.log('scores: ' + data);
-            });
-            socket.on('update:score', function (data) {
-                for(var id in data){ // data es un único elemento que actualizamos en el json
-                    $scope.scores[id] = data[id];
-                }
-                console.log('update:player ' + data[id]);
-            });
-        }
-        onUpdate();
+        $scope.play = function(){
+            $scope.setMenu("main");
+            socket.emit('new:player', {});
+        };
+
     });
