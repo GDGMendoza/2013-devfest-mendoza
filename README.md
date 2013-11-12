@@ -1,18 +1,17 @@
-# Devfest MEAN stack!
+# Devfest: Demo pila de desarrollo M.E.A.N.!
 
-El resumen del proyecto va acá!
+Este juego fue desarrollado para la temporada 2013 de DevFests por el GDGMendoza usando la pila de desarrollo M.E.A.N. (MongoDB, ExpressJS, AngularJS, NodeJS)
 
-## ¿Como usarlo?
+## ¿Cómo instalar la aplicación?
 
-Clonate el repo y corré los siguientes comandos!:
-
+* git clone https://github.com/GDGMendoza/devfest2013-mean-demo.git
 * npm install
 * bower install
 
-## Ejecutando la aplicación
+## Ejecutando la aplicación:
 
 node app.js
 
-## Ejecutando las pruebas
+## Ejecutando las pruebas:
 
 Proximamente!
