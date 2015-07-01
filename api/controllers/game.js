@@ -175,10 +175,11 @@ var io = {},
             }
         },
         newPlayer: function(targetId, user){
+          var randomName = "anon" + new Date();
             game.players.push(targetId, {
                 id: user ? user._id : false,
                 socketId: targetId,
-                nick: user ? user.username : "anon",
+                nick: user ? user.username : randomName,
                 pos: {
                     x: Math.floor(Math.random() * 750),
                     y: Math.floor(Math.random() * 550)
@@ -187,7 +188,7 @@ var io = {},
                 alive: true
             });
             game.scores.push(targetId, {
-                nick: user ? user.username : "anon",
+                nick: user ? user.username : randomName,
                 killScore: user ? (user.killScore ? user.killScore : 0) : 0,
                 survivalScore: user ? (user.survivalScore ? user.survivalScore : 0) : 0
             });

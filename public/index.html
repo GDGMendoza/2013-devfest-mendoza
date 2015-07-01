@@ -11,7 +11,7 @@
 
 <!-- Dynamic Content -->
 <div id="main-container" class="row-fluid">
-
+    <canvas id="canvas"></canvas>
     <div class="scene">
         <player ng-repeat="player in players" status="player"></player>
     </div>
@@ -75,12 +75,15 @@
 
 
 <!-- Dependencias y Módulos -->
+<script src="bower_components/lodash/lodash.min.js"></script>
 <script src="socket.io/socket.io.js"></script>
 <script src="bower_components/angular/angular.js"></script>
 <script src="bower_components/angular-socket-io/socket.js"></script>
+<script src="bower_components/fabric/dist/fabric.min.js"></script>
 <script src="js/controllers.js"></script>
 <script src="js/directives.js"></script>
 <script src="js/app.js"></script>
+<script src="js/canvasService.js"></script>
 
 <embed src="sounds/song.mp3" loop="true" hidden="true" autostart="true">
 

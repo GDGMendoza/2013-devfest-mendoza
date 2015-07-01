@@ -3,10 +3,11 @@
 /* Controllers */
 
 angular.module('devFest.controllers', [])
-    .controller('GameCtrl', function ($scope, $http, socket) {
+    .controller('GameCtrl', ['$scope', '$http', 'socket', 'canvasService', function ($scope, $http, socket, canvasService) {
 
         socket.forward(["players", "update:player", "scores", "update:score"], $scope);
         $scope.$on('socket:players', function(ev, data) {
+            canvasService.init();
             $scope.players = data;
         });
         $scope.$on('socket:update:player', function(ev, data) {
@@ -131,4 +132,4 @@ angular.module('devFest.controllers', [])
             socket.emit('new:player', {});
         };
 
-    });
+    }]);

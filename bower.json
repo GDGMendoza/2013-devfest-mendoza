@@ -1,17 +1,19 @@
 {
-    "name": "devfest-mean-stack",
-    "version": "0.1.0",
-    "ignore": [
-        "**/.*",
-        "node_modules",
-        "components"
-    ],
-    "dependencies": {
-        "angular": "1.2.0",
-        "angular-socket-io": "0.2.0",
-        "bootstrap": "2.x"
-    },
-    "resolutions": {
-        "angular": "1.2.0"
-    }
+  "name": "devfest-mean-stack",
+  "version": "0.1.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ],
+  "dependencies": {
+    "angular": "1.2.0",
+    "angular-socket-io": "0.2.0",
+    "bootstrap": "2.x",
+    "fabric": "~1.5.0",
+    "lodash": "~3.10.0"
+  },
+  "resolutions": {
+    "angular": "1.2.0"
+  }
 }

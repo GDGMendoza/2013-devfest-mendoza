@@ -6,8 +6,8 @@
         "start": "node app.js"
     },
     "dependencies": {
-        "express": "*",
-        "socket.io": "*",
+        "express": "3.x",
+        "socket.io": "0.x",
         "mongoose": "*",
         "session.socket.io": "*"
     }
